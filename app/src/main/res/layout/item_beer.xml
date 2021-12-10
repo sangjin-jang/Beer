@@ -8,12 +8,16 @@
         <variable
             name="item"
             type="com.example.beer.data.Beer" />
+
+        <variable
+            name="presenter"
+            type="com.example.beer.util.DataBindingPresenter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
+        android:onClick="@{(view) -> presenter.onClick(view, item)}"
         android:padding="16dp">
 
         <ImageView

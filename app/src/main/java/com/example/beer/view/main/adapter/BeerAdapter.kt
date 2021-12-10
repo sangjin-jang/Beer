@@ -8,8 +8,10 @@ import com.example.beer.R
 import com.example.beer.binding.SimpleItemDiffCallback
 import com.example.beer.data.Beer
 import com.example.beer.databinding.ItemBeerBinding
+import com.example.beer.util.DataBindingPresenter
 
-class BeerAdapter : ListAdapter<Beer, BeerViewHolder>(SimpleItemDiffCallback<Beer>()) {
+class BeerAdapter(private val presenter: DataBindingPresenter) :
+    ListAdapter<Beer, BeerViewHolder>(SimpleItemDiffCallback<Beer>()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BeerViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -24,6 +26,6 @@ class BeerAdapter : ListAdapter<Beer, BeerViewHolder>(SimpleItemDiffCallback<Bee
     }
 
     override fun onBindViewHolder(holder: BeerViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), presenter)
     }
 }

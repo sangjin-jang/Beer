@@ -1,7 +1,8 @@
 package com.example.beer.view.main
 
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -9,7 +10,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.beer.R
+import com.example.beer.data.Beer
 import com.example.beer.databinding.ActivityMainBinding
+import com.example.beer.util.DataBindingPresenter
 import com.example.beer.view.main.adapter.BeerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,7 +21,13 @@ class MainActivity : AppCompatActivity() {
     private val mainViewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private val beerAdapter by lazy {
-        BeerAdapter()
+        BeerAdapter(object : DataBindingPresenter {
+            override fun onClick(view: View, item: Any) {
+                if (item is Beer) {
+                    Toast.makeText(this@MainActivity, "${item.id}", Toast.LENGTH_LONG).show()
+                }
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                     super.onScrolled(recyclerView, dx, dy)
 
                     (layoutManager as? LinearLayoutManager)?.run {
-                        if(findLastCompletelyVisibleItemPosition() >= itemCount - 1) {
+                        if (findLastCompletelyVisibleItemPosition() >= itemCount - 1) {
                             mainViewModel.getMoreBeers()
                         }
                     }
