@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.beer.R
-import com.example.beer.data.Beer
+import com.example.beer.data.model.Beer
 import com.example.beer.databinding.ActivityMainBinding
 import com.example.beer.util.DataBindingPresenter
 import com.example.beer.view.main.adapter.BeerAdapter
