@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.beer.R
 import com.example.beer.binding.SimpleItemDiffCallback
-import com.example.beer.data.Beer
+import com.example.beer.data.model.Beer
 import com.example.beer.databinding.ItemBeerBinding
 import com.example.beer.util.DataBindingPresenter
 

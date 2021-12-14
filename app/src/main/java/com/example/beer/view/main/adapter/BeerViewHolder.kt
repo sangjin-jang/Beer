@@ -2,7 +2,7 @@ package com.example.beer.view.main.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.beer.BR
-import com.example.beer.data.Beer
+import com.example.beer.data.model.Beer
 import com.example.beer.databinding.ItemBeerBinding
 import com.example.beer.util.DataBindingPresenter
 
