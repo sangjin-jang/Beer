@@ -1,7 +1,6 @@
 package com.example.beer.module
 
-import com.example.beer.repository.BeerRepository
-import com.example.beer.service.ApiService
+import com.example.beer.data.api.ApiService
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -36,9 +35,5 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit) = retrofit.create(ApiService::class.java)
-
-    @Singleton
-    @Provides
-    fun provideBeersRepository(apiService: ApiService) = BeerRepository(apiService)
+    fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
 }
