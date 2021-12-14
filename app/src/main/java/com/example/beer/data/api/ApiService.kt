@@ -1,6 +1,7 @@
-package com.example.beer.service
+package com.example.beer.data.api
 
-import com.example.beer.data.Beer
+import com.example.beer.data.model.Beer
+import com.example.beer.data.model.BeerResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -13,7 +14,7 @@ interface ApiService {
         @Query("beer_name") query: String?,
         @Query("page") page: Int,
         @Query("per_page") perPage: Int
-    ): Response<ArrayList<Beer>>
+    ): Response<List<BeerResponse>>
 
     @GET("beers/random")
     suspend fun randomBeer(): Response<Beer>
