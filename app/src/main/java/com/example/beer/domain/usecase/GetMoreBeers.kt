@@ -2,10 +2,10 @@ package com.example.beer.domain.usecase
 
 import com.example.beer.data.model.Beer
 import com.example.beer.domain.repository.BeerRepository
-import com.example.beer.domain.usecase.BeerUseCase.Params
 import javax.inject.Inject
+import com.example.beer.domain.usecase.GetMoreBeers.Params
 
-class BeerUseCase @Inject constructor(private val beerRepository: BeerRepository) :
+class GetMoreBeers @Inject constructor(private val beerRepository: BeerRepository) :
     BaseUseCase<List<Beer>, Params>() {
 
     override suspend fun run(params: Params): List<Beer>? =

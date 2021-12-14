@@ -1,28 +1,33 @@
 package com.example.beer.view.main
 
 import androidx.databinding.ObservableBoolean
-import androidx.databinding.ObservableInt
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.beer.data.Beer
-import com.example.beer.repository.BeerRepository
+import com.example.beer.data.model.Beer
+import com.example.beer.domain.usecase.GetInitBeers
+import com.example.beer.domain.usecase.GetMoreBeers
+import com.example.beer.util.addToNotify
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val beerRepository: BeerRepository) :
+class MainViewModel @Inject constructor(
+    private val getInitBeers: GetInitBeers,
+    private val getMoreBeers: GetMoreBeers
+) :
     ViewModel() {
 
     var beerName: String? = null
     private var page: Int = 1
     private val perPage: Int = 10
 
-    val beers = MutableLiveData<List<Beer>?>()
-    val isEmpty = ObservableBoolean(false)
-    var hasError = false
+    private val _beers = MutableLiveData<List<Beer>?>()
+    val beers: LiveData<List<Beer>?> = _beers
+
+    var isEmpty = ObservableBoolean(false)
+    var hasError = ObservableBoolean(false)
     var endOfPage = false
 
     init {
@@ -33,36 +38,31 @@ class MainViewModel @Inject constructor(private val beerRepository: BeerReposito
         page = 1
         endOfPage = false
 
-        viewModelScope.launch {
-            beerRepository.getBeers(beerName, page, perPage).runCatching {
-                beers.value = this.body()
-                isEmpty.set(this.body().isNullOrEmpty())
-                endOfPage = this.body().isNullOrEmpty()
-                hasError = false
-            }.onFailure {
-                hasError = true
+        runCatching {
+            getInitBeers(viewModelScope, GetInitBeers.Params(beerName)) {
+                _beers.value = it
+                isEmpty.set(it.isNullOrEmpty())
+                endOfPage = it.isNullOrEmpty()
             }
+        }.onSuccess {
+            hasError.set(false)
+        }.onFailure {
+            hasError.set(true)
         }
     }
 
     fun getMoreBeers() {
         if (endOfPage) return
 
-        page++
-
-        viewModelScope.launch {
-            beerRepository.getBeers(beerName, page, perPage).runCatching {
-                this.body()?.let {
-                    val newBeers = beers.value?.toMutableList()
-                    newBeers?.addAll(it)
-                    beers.value = newBeers
-                }
-
-                hasError = false
-                endOfPage = this.body().isNullOrEmpty()
-            }.onFailure {
-                hasError = true
+        runCatching {
+            getMoreBeers(viewModelScope, GetMoreBeers.Params(beerName, ++page, perPage)) {
+                _beers.addToNotify(it)
+                endOfPage = it.isNullOrEmpty()
             }
+        }.onSuccess {
+            hasError.set(false)
+        }.onFailure {
+            hasError.set(true)
         }
     }
 }
