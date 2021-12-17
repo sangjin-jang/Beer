@@ -1,9 +1,11 @@
 package com.example.beer.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class BeerResponse (
-    val id: Int,
-    val name: String?,
-    val tagline: String?,
-    val description: String?,
-    val imageUrl: String?
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String?,
+    @SerializedName("tagline") val tagline: String?,
+    @SerializedName("description") val description: String?,
+    @SerializedName("image_url") val imageUrl: String?
         )
